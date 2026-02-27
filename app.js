@@ -7,7 +7,7 @@
 
   const PRODUCTS = [
     { id: "carne", name: "Espetinho de carne", price: 6, icon: "🍢" },
-    { id: "frango", name: "Espetinho de frango", price: 4, icon: "🍗" },
+    { id: "frango", name: "Espetinho de frango", price: 6, icon: "🍗" },
     { id: "coxinha", name: "Coxinha", price: 4, icon: "🥟" },
     { id: "bolo", name: "Bolo", price: 5, icon: "🍰" }
   ];
