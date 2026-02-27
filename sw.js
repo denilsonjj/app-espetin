@@ -1,4 +1,4 @@
-﻿const CACHE_VERSION = "v2";
+﻿const CACHE_VERSION = "v3";
 const CACHE_NAME = `vendas-pwa-${CACHE_VERSION}`;
 const CORE_ASSETS = [
   "./",
@@ -34,7 +34,20 @@ self.addEventListener("fetch", (event) => {
 
   event.respondWith(
     caches.match(request).then((cached) => {
-      if (cached) return cached;
+      if (cached) {
+        // Cache-first with background refresh to bring updates on next open.
+        event.waitUntil(
+          fetch(request)
+            .then((response) => {
+              if (!response || response.status !== 200 || response.type !== "basic") {
+                return;
+              }
+              return caches.open(CACHE_NAME).then((cache) => cache.put(request, response.clone()));
+            })
+            .catch(() => {})
+        );
+        return cached;
+      }
 
       return fetch(request)
         .then((response) => {
@@ -55,4 +68,3 @@ self.addEventListener("fetch", (event) => {
     })
   );
 });
-
