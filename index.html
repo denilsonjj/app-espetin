@@ -1,0 +1,205 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0f766e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="description" content="Controle diário de vendas da barraca" />
+  <link rel="manifest" href="./manifest.json" />
+  <title>Vendas do Dia</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #475569;
+      --accent: #0f766e;
+      --accent-press: #0b5f58;
+      --danger: #b91c1c;
+      --danger-press: #991b1b;
+      --radius: 16px;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+      background: linear-gradient(180deg, #eef6f5 0%, var(--bg) 42%);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .app {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 16px;
+      display: grid;
+      gap: 16px;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .total {
+      margin: 10px 0 6px;
+      font-size: clamp(2.6rem, 10vw, 4.2rem);
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 1.15rem;
+    }
+
+    .badge {
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      border: 1px solid #cbd5e1;
+      background: #f8fafc;
+    }
+
+    .badge.online {
+      color: #166534;
+      border-color: #86efac;
+      background: #f0fdf4;
+    }
+
+    .badge.offline {
+      color: #9a3412;
+      border-color: #fdba74;
+      background: #fff7ed;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    button {
+      border: none;
+      border-radius: 14px;
+      padding: 18px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: transform 0.04s ease, background-color 0.15s ease;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    .product-btn {
+      background: var(--accent);
+      color: #fff;
+      text-align: left;
+      min-height: 136px;
+      display: grid;
+      align-content: center;
+      gap: 8px;
+    }
+
+    .product-icon {
+      font-size: 1.9rem;
+      line-height: 1;
+    }
+
+    .product-btn:active,
+    .product-btn:hover {
+      background: var(--accent-press);
+    }
+
+    .product-name {
+      font-size: 1.25rem;
+      line-height: 1.2;
+    }
+
+    .product-price {
+      font-size: 1.2rem;
+      opacity: 0.95;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .secondary-btn {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .secondary-btn:active,
+    .secondary-btn:hover {
+      background: #cbd5e1;
+    }
+
+    .danger-btn {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .danger-btn:active,
+    .danger-btn:hover {
+      background: var(--danger-press);
+    }
+
+    .secondary-btn[disabled] {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 360px) {
+      .grid { grid-template-columns: 1fr; }
+      .actions { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" aria-live="polite">
+    <section class="card">
+      <h1>Total do dia</h1>
+      <div id="total" class="total">R$ 0,00</div>
+      <div class="meta">
+        <span id="currentDate"></span>
+        <span id="networkBadge" class="badge offline">Offline</span>
+      </div>
+    </section>
+
+    <section class="grid" id="productGrid" aria-label="Produtos"></section>
+
+    <section class="actions">
+      <button id="resetBtn" class="danger-btn" type="button">Resetar dia</button>
+      <button id="undoBtn" class="secondary-btn" type="button" disabled>Desfazer</button>
+    </section>
+  </main>
+
+  <script src="./app.js" defer></script>
+</body>
+</html>
